@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { getFavorites } from '../services/FavoritesService';
-import { getAllTechnicians } from '../services/TechnicianService';
+import { getAllTechnicians } from '../services/technicianService';
 
 // Import screens
 import HomeScreen from '../screens/HomeScreen';
