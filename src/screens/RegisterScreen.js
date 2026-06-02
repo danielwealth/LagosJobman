@@ -1,20 +1,25 @@
 // src/screens/RegisterScreen.js
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
-import { Picker } from '@react-native-picker/picker';
+import { useNavigate } from 'react-router-dom';
 import AvailabilityToggle from '../components/AvailabilityToggle';
 import ImageUploader from '../components/ImageUploader';
 import { createTechnician } from '../services/technicianService';
-import { globalStyles } from '../styles/globalStyles';
-import { isValidEmail, isValidPassword } from '../utils/validators';
-import { JOB_TYPES, LAGOS_LGAS } from '../utils/constants';
+import '../styles/globalStyles.css'; // converted CSS styles
 
 const lagosLGAs = ['Ikeja', 'Surulere', 'Eti-Osa', 'Alimosho', 'Apapa'];
-const jobTypes = ['Electrician', 'Plumber', 'Bricklayer', 'Carpenter', 'Painter','Tiler',
-    'SolarInstaller'
+const jobTypes = [
+  'Electrician',
+  'Plumber',
+  'Bricklayer',
+  'Carpenter',
+  'Painter',
+  'Tiler',
+  'SolarInstaller'
 ];
 
-export default function RegisterScreen({ navigation }) {
+export default function RegisterScreen() {
+  const navigate = useNavigate();
+
   const [name, setName] = useState('');
   const [jobType, setJobType] = useState(jobTypes[0]);
   const [lga, setLga] = useState(lagosLGAs[0]);
@@ -33,44 +38,53 @@ export default function RegisterScreen({ navigation }) {
     };
 
     const newTech = createTechnician(profile);
-    alert(`Technician ${newTech.name} registered successfully!`);
+    window.alert(`Technician ${newTech.name} registered successfully!`);
 
     // Navigate to Profile screen with the new technician data
-    navigation.navigate('Profile', { technician: newTech });
+    navigate('/profile', { state: { technician: newTech } });
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>Register as Technician</Text>
+    <div className="container">
+      <h1 className="title">Register as Technician</h1>
 
-      <TextInput
-        style={globalStyles.input}
+      <input
+        className="input"
         placeholder="Full Name"
         value={name}
-        onChangeText={setName}
+        onChange={(e) => setName(e.target.value)}
       />
 
-      <Text style={globalStyles.label}>Job Type</Text>
-      
-      <Picker selectedValue={jobType} onValueChange={(val) => setJobType(val)}>
+      <label className="label">Job Type</label>
+      <select
+        className="input"
+        value={jobType}
+        onChange={(e) => setJobType(e.target.value)}
+      >
         {jobTypes.map((job) => (
-          <Picker.Item key={job} label={job} value={job} />
+          <option key={job} value={job}>{job}</option>
         ))}
-      </Picker>
+      </select>
 
-      <Text style={globalStyles.label}>Lagos LGA</Text>
-      <Picker selectedValue={lga} onValueChange={(val) => setLga(val)}>
+      <label className="label">Lagos LGA</label>
+      <select
+        className="input"
+        value={lga}
+        onChange={(e) => setLga(e.target.value)}
+      >
         {lagosLGAs.map((area) => (
-          <Picker.Item key={area} label={area} value={area} />
+          <option key={area} value={area}>{area}</option>
         ))}
-      </Picker>
+      </select>
 
       <AvailabilityToggle available={available} setAvailable={setAvailable} />
 
       <ImageUploader label="Face Photo" onImageSelected={setFaceImage} />
       <ImageUploader label="Work Sample" onImageSelected={setWorkImage} />
 
-      <Button title="Submit Registration" onPress={handleRegister} />
-    </View>
+      <button className="button" onClick={handleRegister}>
+        Submit Registration
+      </button>
+    </div>
   );
 }
