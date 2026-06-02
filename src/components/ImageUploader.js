@@ -1,37 +1,26 @@
 // src/components/ImageUploader.js
 import React, { useState } from 'react';
-import { View, Button, Image, StyleSheet, Text } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import '../styles/globalStyles.css'; // assuming you converted styles to CSS
 
 export default function ImageUploader({ label, onImageSelected }) {
   const [imageUri, setImageUri] = useState(null);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const uri = result.assets[0].uri;
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const uri = URL.createObjectURL(file);
       setImageUri(uri);
       onImageSelected(uri); // Pass image URI back to parent
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <Button title="Upload Image" onPress={pickImage} />
-      {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-    </View>
+    <div className="image-uploader">
+      <label className="label">{label}</label>
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      {imageUri && (
+        <img src={imageUri} alt="Uploaded preview" className="uploaded-image" />
+      )}
+    </div>
   );
 }
-
-const styles = StyleSheet.create({
-  container: { marginVertical: 10 },
-  label: { fontSize: 16, marginBottom: 5 },
-  image: { width: 100, height: 100, marginTop: 10, borderRadius: 8 },
-});
