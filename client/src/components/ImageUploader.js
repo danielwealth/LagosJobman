@@ -1,7 +1,5 @@
 // src/components/ImageUploader.js
 import React, { useState } from 'react';
-import { View, Button, Image, StyleSheet, Text } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 
 export default function ImageUploader({ label, onImageSelected }) {
   const [imageUri, setImageUri] = useState(null);
