@@ -1,12 +1,18 @@
+// src/index.js
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './index.css'; // optional, if you have global styles
+import { createRoot } from 'react-dom/client';
+import AppNavigator from './navigation/AppNavigator';
+import './index.css'; // optional global styles
 
-// Create root and render App component
-const root = ReactDOM.createRoot(document.getElementById('root'));
+// Grab the root element
+const container = document.getElementById('root');
+
+// Create React 18 root
+const root = createRoot(container);
+
+// Render the app
 root.render(
   <React.StrictMode>
-    <App />
+    <AppNavigator />
   </React.StrictMode>
 );
