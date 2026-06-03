@@ -2,34 +2,40 @@
 import React, { useState } from 'react';
 
 export default function ImageUploader({ label, onImageSelected }) {
-  const [imageUri, setImageUri] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      setImageUri(uri);
-      onImageSelected(uri); // Pass image URI back to parent
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const url = URL.createObjectURL(file); // create a temporary preview URL
+      setImageUrl(url);
+      onImageSelected(file); // pass the File object back to parent
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
-      <Button title="Upload Image" onPress={pickImage} />
-      {imageUri && <Image source={{ uri: imageUri }} style={styles.image} />}
-    </View>
+    <div style={styles.container}>
+      <label style={styles.label}>{label}</label>
+      <input type="file" accept="image/*" onChange={handleFileChange} />
+      {imageUrl && <img src={imageUrl} alt="Preview" style={styles.image} />}
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { marginVertical: 10 },
-  label: { fontSize: 16, marginBottom: 5 },
-  image: { width: 100, height: 100, marginTop: 10, borderRadius: 8 },
-});
+const styles = {
+  container: {
+    margin: '10px 0',
+  },
+  label: {
+    fontSize: '16px',
+    marginBottom: '5px',
+    display: 'block',
+  },
+  image: {
+    width: '100px',
+    height: '100px',
+    marginTop: '10px',
+    borderRadius: '8px',
+    objectFit: 'cover',
+  },
+};
