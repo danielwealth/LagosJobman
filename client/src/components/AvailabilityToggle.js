@@ -3,18 +3,34 @@ import React from 'react';
 
 export default function AvailabilityToggle({ available, setAvailable }) {
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Available</Text>
-      <Switch
-        value={available}
-        onValueChange={setAvailable}
-        thumbColor={available ? '#4CAF50' : '#f44336'}
+    <div style={styles.container}>
+      <label style={styles.label}>Available</label>
+      <input
+        type="checkbox"
+        checked={available}
+        onChange={(e) => setAvailable(e.target.checked)}
+        style={{
+          ...styles.switch,
+          accentColor: available ? '#4CAF50' : '#f44336',
+        }}
       />
-    </View>
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flexDirection: 'row', alignItems: 'center', marginVertical: 10 },
-  label: { fontSize: 16, marginRight: 10 },
-});
+const styles = {
+  container: {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '10px 0',
+  },
+  label: {
+    fontSize: '16px',
+    marginRight: '10px',
+  },
+  switch: {
+    width: '20px',
+    height: '20px',
+    cursor: 'pointer',
+  },
+};
