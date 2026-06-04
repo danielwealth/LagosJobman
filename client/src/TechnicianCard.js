@@ -1,6 +1,5 @@
 // src/components/TechnicianCard.js
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
 export default function TechnicianCard({ technician, onPress }) {
   return (
