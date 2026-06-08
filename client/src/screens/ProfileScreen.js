@@ -13,9 +13,9 @@ export default function ProfileScreen({ route }) {
 
   if (!technician) {
     return (
-      <View style={globalStyles.container}>
-        <Text style={globalStyles.title}>No technician data provided.</Text>
-      </View>
+      <div style={globalStyles.container}>
+        <h2 style={globalStyles.title}>No technician data provided.</h2>
+      </div>
     );
   }
 
@@ -25,30 +25,40 @@ export default function ProfileScreen({ route }) {
       faceImage,
       workImage,
     });
-    Alert.alert('Profile Updated', `${updated.name}'s profile has been updated.`);
+    window.alert(`Profile Updated: ${updated.name}'s profile has been updated.`);
   };
 
   return (
-    <View style={globalStyles.container}>
-      <Text style={globalStyles.title}>{technician.name}</Text>
-      <Text style={globalStyles.label}>Job Type: {technician.jobType}</Text>
-      <Text style={globalStyles.label}>Location (LGA): {technician.lga}</Text>
+    <div style={globalStyles.container}>
+      <h2 style={globalStyles.title}>{technician.name}</h2>
+      <p style={globalStyles.label}>Job Type: {technician.jobType}</p>
+      <p style={globalStyles.label}>Location (LGA): {technician.lga}</p>
 
       <AvailabilityToggle available={available} setAvailable={setAvailable} />
 
       <ImageUploader label="Update Face Photo" onImageSelected={setFaceImage} />
-      {faceImage && <Image source={{ uri: faceImage }} style={styles.image} />}
+      {faceImage && (
+        <img src={faceImage} alt="Face" style={styles.image} />
+      )}
 
       <ImageUploader label="Update Work Sample" onImageSelected={setWorkImage} />
-      {workImage && <Image source={{ uri: workImage }} style={styles.image} />}
+      {workImage && (
+        <img src={workImage} alt="Work Sample" style={styles.image} />
+      )}
 
-      <TouchableOpacity style={globalStyles.button} onPress={handleUpdate}>
-        <Text style={globalStyles.buttonText}>Save Changes</Text>
-      </TouchableOpacity>
-    </View>
+      <button style={globalStyles.button} onClick={handleUpdate}>
+        Save Changes
+      </button>
+    </div>
   );
 }
 
-const styles = StyleSheet.create({
-  image: { width: 150, height: 150, borderRadius: 8, marginVertical: 10 },
-});
+const styles = {
+  image: {
+    width: '150px',
+    height: '150px',
+    borderRadius: '8px',
+    margin: '10px 0',
+    objectFit: 'cover',
+  },
+};
