@@ -4,9 +4,13 @@ import AvailabilityToggle from '../components/AvailabilityToggle';
 import ImageUploader from '../components/ImageUploader';
 import { updateTechnician } from '../services/technicianService';
 import { globalStyles } from '../styles/globalStyles';
+import { useLocation } from 'react-router-dom';
 
-export default function ProfileScreen({ route }) {
-  const { technician } = route.params || {};
+export default function ProfileScreen() {
+  // ✅ In React Router, technician data can be passed via navigate('/profile', { state: { technician } })
+  const location = useLocation();
+  const { technician } = location.state || {};
+
   const [available, setAvailable] = useState(technician?.available || false);
   const [faceImage, setFaceImage] = useState(technician?.faceImage || null);
   const [workImage, setWorkImage] = useState(technician?.workImage || null);
