@@ -1,87 +1,64 @@
 // src/screens/SearchScreen.js
 import React, { useState } from 'react';
-import TechnicianCard from '../components/TechnicianCard';
-import { searchTechnicians } from '../services/searchService';
-import { useNavigate } from 'react-router-dom';
-
-const lagosLGAs = ['Ikeja', 'Surulere', 'Eti-Osa', 'Alimosho', 'Apapa'];
-const jobTypes = ['Electrician', 'Plumber', 'Bricklayer', 'Carpenter', 'Painter'];
+import { globalStyles } from '../styles/globalStyles';
+import { lagosLGAs, jobTypes } from '../data/constants'; // reuse arrays
+import { searchTechnicians } from '../services/technicianService';
 
 export default function SearchScreen() {
-  const [selectedJob, setSelectedJob] = useState(jobTypes[0]);
-  const [selectedLga, setSelectedLga] = useState(lagosLGAs[0]);
-  const navigate = useNavigate();
+  const [selectedLga, setSelectedLga] = useState('');
+  const [selectedJob, setSelectedJob] = useState('');
+  const [results, setResults] = useState([]);
 
-  // Call search service
-  const filteredTechnicians = searchTechnicians(selectedJob, selectedLga);
+  const handleSearch = async () => {
+    const technicians = await searchTechnicians(selectedLga, selectedJob);
+    setResults(technicians);
+  };
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Search Technicians</h2>
+    <div style={globalStyles.container}>
+      <h2 style={globalStyles.title}>Find Technicians</h2>
 
-      <label style={styles.label}>Job Type</label>
+      <label style={globalStyles.label}>Select LGA</label>
       <select
-        value={selectedJob}
-        onChange={(e) => setSelectedJob(e.target.value)}
-        style={styles.select}
-      >
-        {jobTypes.map((job) => (
-          <option key={job} value={job}>{job}</option>
-        ))}
-      </select>
-
-      <label style={styles.label}>Lagos LGA</label>
-      <select
+        style={globalStyles.input}
         value={selectedLga}
         onChange={(e) => setSelectedLga(e.target.value)}
-        style={styles.select}
       >
+        <option value="">-- Any LGA --</option>
         {lagosLGAs.map((area) => (
           <option key={area} value={area}>{area}</option>
         ))}
       </select>
 
-      <label style={styles.label}>Available Technicians</label>
-      {filteredTechnicians.length === 0 ? (
-        <p>No available technicians found.</p>
-      ) : (
-        <div>
-          {filteredTechnicians.map((item) => (
-            <TechnicianCard
-              key={item.id}
-              technician={item}
-              onPress={() => navigate('/profile', { state: { technician: item } })}
-            />
-          ))}
-        </div>
-      )}
+      <label style={globalStyles.label}>Select Job Type</label>
+      <select
+        style={globalStyles.input}
+        value={selectedJob}
+        onChange={(e) => setSelectedJob(e.target.value)}
+      >
+        <option value="">-- Any Job --</option>
+        {jobTypes.map((job) => (
+          <option key={job} value={job}>{job}</option>
+        ))}
+      </select>
+
+      <button style={globalStyles.button} onClick={handleSearch}>
+        Search
+      </button>
+
+      <div style={{ marginTop: '20px' }}>
+        {results.length > 0 ? (
+          results.map((tech) => (
+            <div key={tech.id} style={globalStyles.card}>
+              <h3>{tech.name}</h3>
+              <p>{tech.jobType} in {tech.lga}</p>
+              <p>{tech.available ? 'Available' : 'Not Available'}</p>
+            </div>
+          ))
+        ) : (
+          <p>No technicians found. Try another filter.</p>
+        )}
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    padding: '20px',
-    maxWidth: '600px',
-    margin: '0 auto',
-    backgroundColor: '#f9f9f9',
-    borderRadius: '8px',
-  },
-  title: {
-    fontSize: '24px',
-    marginBottom: '15px',
-  },
-  label: {
-    display: 'block',
-    fontSize: '16px',
-    marginTop: '10px',
-    marginBottom: '5px',
-  },
-  select: {
-    width: '100%',
-    padding: '8px',
-    marginBottom: '15px',
-    borderRadius: '4px',
-    border: '1px solid #ccc',
-  },
-};
