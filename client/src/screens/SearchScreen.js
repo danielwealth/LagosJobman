@@ -1,7 +1,7 @@
 // src/screens/SearchScreen.js
 import React, { useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
-import { lagosLGAs, jobTypes } from '../data/constants'; // reuse arrays
+import { lagosLGAs, jobTypes } from '../utils/constants'; // reuse arrays
 import { searchTechnicians } from '../services/technicianService';
 
 export default function SearchScreen() {
