@@ -77,6 +77,20 @@ export default function LoginScreen() {
       >
         {loading ? 'Logging in…' : 'Login'}
       </button>
+        <button
+  style={globalStyles.button}
+  onClick={() => navigate('/signup')}
+>
+  Sign Up
+</button>
+
+<button
+  style={globalStyles.button}
+  onClick={() => navigate('/register')}
+>
+  Register as Technician
+</button>
+
 
       <button
         style={globalStyles.button}
