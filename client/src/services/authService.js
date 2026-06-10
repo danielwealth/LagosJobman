@@ -13,7 +13,13 @@ export async function registerUser(email, password) {
     });
 
     const data = await response.json();
-    return data; // { success: true, user: {...} } or { success: false, message: "..." }
+
+    if (data.success && data.token) {
+      // ✅ Save token for authenticated requests
+      localStorage.setItem("authToken", data.token);
+    }
+
+    return data; // { success, user, token }
   } catch (error) {
     console.error("Register error:", error);
     return { success: false, message: "Server error during registration." };
@@ -32,11 +38,11 @@ export async function loginUser(email, password) {
     const data = await response.json();
 
     if (data.success && data.token) {
-      // Save token for authenticated requests
+      // ✅ Save token for authenticated requests
       localStorage.setItem("authToken", data.token);
     }
 
-    return data;
+    return data; // { success, user, token }
   } catch (error) {
     console.error("Login error:", error);
     return { success: false, message: "Server error during login." };
