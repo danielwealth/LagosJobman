@@ -28,8 +28,14 @@ export default function SignUpScreen() {
 
       if (result.success && result.user) {
         setSuccess('Account created successfully!');
-        // Redirect to login after short delay
-        setTimeout(() => navigate('/login'), 1500);
+
+        // ✅ Save token so ProtectedRoute recognizes login
+        if (result.token) {
+          localStorage.setItem('authToken', result.token);
+        }
+
+        // ✅ Redirect straight to Home
+        navigate('/home');
       } else {
         setError(result.message || 'Registration failed.');
       }
