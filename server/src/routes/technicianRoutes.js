@@ -4,7 +4,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { protect } from '../middleware/authMiddleware.js';
 import { create, list, detail, update, remove } from '../controllers/technicianController.js';
-import Technician from '../models/technician.js';
+import Technician from '../models/Technician.js';
 
 const router = express.Router();
 // POST /api/technicians/register
