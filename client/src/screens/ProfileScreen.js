@@ -1,68 +1,63 @@
 // src/screens/ProfileScreen.js
-import React, { useState } from 'react';
-import AvailabilityToggle from '../components/AvailabilityToggle';
-import ImageUploader from '../components/ImageUploader';
-import { updateTechnician } from '../services/technicianService';
-import { globalStyles } from '../styles/globalStyles';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { globalStyles } from '../styles/globalStyles';
 
 export default function ProfileScreen() {
-  // ✅ In React Router, technician data can be passed via navigate('/profile', { state: { technician } })
   const location = useLocation();
-  const { technician } = location.state || {};
-
-  const [available, setAvailable] = useState(technician?.available || false);
-  const [faceImage, setFaceImage] = useState(technician?.faceImage || null);
-  const [workImage, setWorkImage] = useState(technician?.workImage || null);
+  const technician = location.state?.technician;
 
   if (!technician) {
-    return (
-      <div style={globalStyles.container}>
-        <h2 style={globalStyles.title}>No technician data provided.</h2>
-      </div>
-    );
+    return <div style={globalStyles.container}>No technician data available.</div>;
   }
-
-  const handleUpdate = () => {
-    const updated = updateTechnician(technician.id, {
-      available,
-      faceImage,
-      workImage,
-    });
-    window.alert(`Profile Updated: ${updated.name}'s profile has been updated.`);
-  };
 
   return (
     <div style={globalStyles.container}>
-      <h2 style={globalStyles.title}>{technician.name}</h2>
-      <p style={globalStyles.label}>Job Type: {technician.jobType}</p>
-      <p style={globalStyles.label}>Location (LGA): {technician.lga}</p>
+      <h2 style={globalStyles.title}>Technician Profile</h2>
 
-      <AvailabilityToggle available={available} setAvailable={setAvailable} />
+      <p><strong>Name:</strong> {technician.name}</p>
+      <p><strong>Phone:</strong> {technician.phoneNumber}</p>
+      <p><strong>Job Type:</strong> {technician.jobType}</p>
+      <p><strong>LGA:</strong> {technician.lga}</p>
+      <p><strong>Available:</strong> {technician.available ? 'Yes' : 'No'}</p>
 
-      <ImageUploader label="Update Face Photo" onImageSelected={setFaceImage} />
-      {faceImage && (
-        <img src={faceImage} alt="Face" style={styles.image} />
+      {technician.faceImage && (
+        <div>
+          <strong>Profile Photo:</strong>
+          <img 
+            src={`https://lagosjobman.onrender.com${technician.faceImage}`} 
+            alt="Profile" 
+            style={{ width: '150px', marginTop: '10px', borderRadius: '8px' }} 
+          />
+        </div>
       )}
 
-      <ImageUploader label="Update Work Sample" onImageSelected={setWorkImage} />
-      {workImage && (
-        <img src={workImage} alt="Work Sample" style={styles.image} />
+      {technician.workImage && (
+        <div>
+          <strong>Work Sample:</strong>
+          <img 
+            src={`https://lagosjobman.onrender.com${technician.workImage}`} 
+            alt="Work Sample" 
+            style={{ width: '150px', marginTop: '10px', borderRadius: '8px' }} 
+          />
+        </div>
       )}
 
-      <button style={globalStyles.button} onClick={handleUpdate}>
-        Save Changes
-      </button>
+      {technician.message && (
+        <div
+          style={{
+            marginTop: '20px',
+            padding: '15px',
+            backgroundColor: '#f0f8ff',
+            borderLeft: '5px solid #0077cc',
+            borderRadius: '8px',
+            fontStyle: 'italic'
+          }}
+        >
+          <strong>Message from Technician:</strong>
+          <p style={{ marginTop: '8px' }}>{technician.message}</p>
+        </div>
+      )}
     </div>
   );
 }
-
-const styles = {
-  image: {
-    width: '150px',
-    height: '150px',
-    borderRadius: '8px',
-    margin: '10px 0',
-    objectFit: 'cover',
-  },
-};
