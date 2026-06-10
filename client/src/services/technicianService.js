@@ -1,7 +1,7 @@
 // src/services/technicianService.js
 
 const API_BASE = "https://lagjobman.onrender.com/api/technicians"; 
-// Replace with your actual backend endpoint for technicians
+// Replace with your actual backend endpoint
 
 // Create a new technician profile
 export async function createTechnician(profile) {
@@ -14,10 +14,10 @@ export async function createTechnician(profile) {
 
     const data = await response.json();
 
-    if (response.ok && data) {
+    if (response.ok) {
       return {
         success: true,
-        technician: data.technician || data, // normalize response
+        technician: data.technician || data,
         message: data.message || "Technician registered successfully",
       };
     } else {
@@ -43,13 +43,30 @@ export async function getAllTechnicians() {
     const response = await fetch(`${API_BASE}`);
     const data = await response.json();
 
-    if (response.ok && Array.isArray(data)) {
-      return { success: true, technicians: data };
+    if (response.ok) {
+      return { success: true, technicians: data.technicians || data };
     } else {
       return { success: false, technicians: [], message: data.message || "Failed to fetch technicians" };
     }
   } catch (error) {
     console.error("Get technicians error:", error);
     return { success: false, technicians: [], message: "Server error fetching technicians" };
+  }
+}
+
+// Search technicians by query
+export async function searchTechnicians(query) {
+  try {
+    const response = await fetch(`${API_BASE}/search?q=${encodeURIComponent(query)}`);
+    const data = await response.json();
+
+    if (response.ok) {
+      return { success: true, technicians: data.technicians || data };
+    } else {
+      return { success: false, technicians: [], message: data.message || "Search failed" };
+    }
+  } catch (error) {
+    console.error("Search technicians error:", error);
+    return { success: false, technicians: [], message: "Server error during technician search" };
   }
 }
