@@ -3,11 +3,16 @@ import { registerUser, loginUser, logoutUser } from '../services/authService.js'
 
 export const register = async (req, res) => {
   try {
-    // Extract uploaded file paths
-    const faceImage = req.files?.faceImage?.[0]?.path || null;
-    const workImage = req.files?.workImage?.[0]?.path || null;
+    // ✅ Build accessible URLs for uploaded files
+    const faceImage = req.files?.faceImage?.[0]
+      ? `/uploads/${req.files.faceImage[0].filename}`
+      : null;
 
-    // Merge body with file paths
+    const workImage = req.files?.workImage?.[0]
+      ? `/uploads/${req.files.workImage[0].filename}`
+      : null;
+
+    // ✅ Merge body with file URLs
     const userData = {
       ...req.body,
       faceImage,
