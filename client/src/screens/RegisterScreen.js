@@ -5,13 +5,17 @@ import { createTechnician } from '../services/technicianService';
 import { globalStyles } from '../styles/globalStyles';
 import { useNavigate } from 'react-router-dom';
 
-const lagosLGAs = ['Agege','Ajeromi-Ifelodun','Alimosho','Amuwo-Odofin','Apapa','Badagry',
+const lagosLGAs = [
+  'Agege','Ajeromi-Ifelodun','Alimosho','Amuwo-Odofin','Apapa','Badagry',
   'Epe','Eti-Osa','Ikeja','Ikorodu','Kosofe','Lagos Island','Lagos Mainland',
-  'Mushin','Ojo','Oshodi-Isolo','Shomolu','Surulere','Ifako-Ijaiye','Ibeju-Lekki'];
+  'Mushin','Ojo','Oshodi-Isolo','Shomolu','Surulere','Ifako-Ijaiye','Ibeju-Lekki'
+];
 
-const jobTypes = ['Electrician','Plumber','Bricklayer','Carpenter','Painter','Tiler','Solar Installer',
+const jobTypes = [
+  'Electrician','Plumber','Bricklayer','Carpenter','Painter','Tiler','Solar Installer',
   'Welder','Mechanic','AC/Fridge Repair','Generator Technician','ICT Support',
-  'Phone Repair','CCTV Installer','Satellite Dish Installer'];
+  'Phone Repair','CCTV Installer','Satellite Dish Installer'
+];
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
@@ -29,29 +33,22 @@ export default function RegisterScreen() {
       return;
     }
 
-   const handleRegister = async () => {
-  if (!name || !faceImage || !workImage) {
-    alert('Please fill all fields and upload both images.');
-    return;
-  }
+    const profile = { name, jobType, lga, available, faceImage, workImage };
 
-  const profile = { name, jobType, lga, available, faceImage, workImage };
+    try {
+      const result = await createTechnician(profile);
 
-  try {
-    const result = await createTechnician(profile);
-
-    if (result.success) {
-      alert(result.message);
-      navigate('/profile', { state: { technician: result.technician } });
-    } else {
-      alert(result.message);
+      if (result.success) {
+        alert(result.message);
+        navigate('/profile', { state: { technician: result.technician } });
+      } else {
+        alert(result.message);
+      }
+    } catch (err) {
+      console.error('Registration failed:', err);
+      alert('Something went wrong. Please try again.');
     }
-  } catch (err) {
-    console.error('Registration failed:', err);
-    alert('Something went wrong. Please try again.');
-  }
-};
-
+  };
 
   return (
     <div style={globalStyles.container}>
