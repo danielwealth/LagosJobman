@@ -67,7 +67,11 @@ export default function HomeScreen() {
         ) : (
           <ul>
             {technicians.map((tech) => (
-              <li key={tech._id} style={{ marginBottom: '10px' }}>
+              <li
+                key={tech._id}
+                style={{ marginBottom: '10px', cursor: 'pointer', color: '#007bff' }}
+                onClick={() => navigate('/profile', { state: { technician: tech } })}
+              >
                 <strong>{tech.name}</strong> — {tech.jobType} ({tech.lga})
               </li>
             ))}
