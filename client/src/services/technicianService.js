@@ -20,19 +20,21 @@ export const createTechnician = async (profile) => {
   }
 };
 
-// ✅ Add getAllTechnicians
-export const getAllTechnicians = async () => {
+// ✅ Add searchTechnicians
+export const searchTechnicians = async (query) => {
   try {
-    const response = await fetch('https://lagjobman.onrender.com/api/technicians');
+    const response = await fetch(
+      `https://lagjobman.onrender.com/api/search?query=${encodeURIComponent(query)}`
+    );
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || 'Failed to fetch technicians');
+      throw new Error(errorData.message || 'Failed to search technicians');
     }
 
     return await response.json();
   } catch (error) {
-    console.error('Error fetching technicians:', error);
+    console.error('Error searching technicians:', error);
     throw error;
   }
 };
