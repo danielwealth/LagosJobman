@@ -20,6 +20,8 @@ const jobTypes = [
 
 export default function RegisterScreen() {
   const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [message, setMessage] = useState('');
   const [jobType, setJobType] = useState(jobTypes[0]);
   const [lga, setLga] = useState(lagosLGAs[0]);
   const [available, setAvailable] = useState(true);
@@ -29,7 +31,16 @@ export default function RegisterScreen() {
   const navigate = useNavigate();
 
   const handleRegister = () => {
-    const profile = { name, jobType, lga, available, faceImage, workImage };
+    const profile = { 
+      name, 
+      phoneNumber, 
+      message, 
+      jobType, 
+      lga, 
+      available, 
+      faceImage, 
+      workImage 
+    };
     const newTech = createTechnician(profile);
     window.alert(`Technician ${newTech.name} registered successfully!`);
     navigate('/profile', { state: { technician: newTech } });
@@ -44,6 +55,14 @@ export default function RegisterScreen() {
         placeholder="Full Name"
         value={name}
         onChange={(e) => setName(e.target.value)}
+      />
+
+      <input
+        style={globalStyles.input}
+        type="tel"
+        placeholder="Phone Number"
+        value={phoneNumber}
+        onChange={(e) => setPhoneNumber(e.target.value)}
       />
 
       <label style={globalStyles.label}>Job Type</label>
@@ -72,6 +91,13 @@ export default function RegisterScreen() {
 
       <ImageUploader label="Face Photo" onImageSelected={setFaceImage} />
       <ImageUploader label="Work Sample" onImageSelected={setWorkImage} />
+
+      <textarea
+        style={{ ...globalStyles.input, height: '100px' }}
+        placeholder="Leave a message for clients"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
 
       <button style={globalStyles.button} onClick={handleRegister}>
         Submit Registration
