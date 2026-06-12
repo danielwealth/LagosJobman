@@ -16,7 +16,7 @@ export default function ImageUploader({ label, onImageSelected }) {
     // Upload to backend
     try {
       const formData = new FormData();
-      formData.append('file', file);
+      formData.append('image', file);
 
       const response = await fetch('https://lagjobman.onrender.com/api/upload', {
         method: 'POST',
