@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { globalStyles } from '../styles/globalStyles';
 import { logoutUser } from '../services/authService';
-import logo from '../assets/logo2.png';
+import logo from '../assets/logo.png';
 import { useNavigate } from 'react-router-dom';
 
 export default function HomeScreen() {
